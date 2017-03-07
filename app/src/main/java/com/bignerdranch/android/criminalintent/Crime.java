@@ -82,4 +82,11 @@ public class Crime
     {
         mSolved = solved;
     }
+
+
+    public String convertDateForHuman()
+    {
+        DateFormat format = new DateFormat();
+        return format.format("EEEE, MMMM dd, yyyy", mDate).toString();
+    }
 }

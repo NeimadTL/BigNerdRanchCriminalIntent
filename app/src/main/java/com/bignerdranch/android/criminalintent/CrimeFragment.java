@@ -3,7 +3,6 @@ package com.bignerdranch.android.criminalintent;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Contacts;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.Editable;
@@ -92,9 +91,8 @@ public class CrimeFragment extends Fragment
 
 
         mDateButton = (Button) view.findViewById(R.id.crime_date);
-        //mDateButton.setText(convertToHumanDate());
-        mDateButton.setText(mCrime.getDate().toString());
-
+        //mDateButton.setText(mCrime.getDate().toString());
+        updateDate();
         mDateButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -124,13 +122,6 @@ public class CrimeFragment extends Fragment
     }
 
 
-    private String convertToHumanDate()
-    {
-        DateFormat format = new DateFormat();
-        return format.format("EEEE, MMMM dd, yyyy", mCrime.getDate()).toString();
-    }
-
-
 
     private void setCrimeChangedResult(UUID crimeId)
     {
@@ -153,7 +144,15 @@ public class CrimeFragment extends Fragment
         {
             Date date = (Date) data.getSerializableExtra(DatePickerFragment.DATE_EXTRA);
             mCrime.setDate(date);
-            mDateButton.setText(mCrime.getDate().toString());
+            //mDateButton.setText(mCrime.getDate().toString());
+            updateDate();
         }
+    }
+
+
+    private void updateDate()
+    {
+        String readableDate = mCrime.convertDateForHuman();
+        mDateButton.setText(readableDate);
     }
 }

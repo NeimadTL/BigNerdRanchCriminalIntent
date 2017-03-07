@@ -101,7 +101,7 @@ public class CrimeListFragment extends Fragment
         {
             mCrime = crime;
             mTitleTextView.setText(mCrime.getTitle());
-            mDateTextView.setText(mCrime.getDate().toString());
+            mDateTextView.setText(mCrime.convertDateForHuman());
             mSolvedCheckbox.setChecked(mCrime.isSolved());
         }
 
