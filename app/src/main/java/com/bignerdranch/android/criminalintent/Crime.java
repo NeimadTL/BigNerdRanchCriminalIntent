@@ -17,6 +17,7 @@ public class Crime
     private UUID mId;
     private String mTitle;
     private Date mDate;
+    private Date mTime;
     private boolean mSolved;
 
 
@@ -26,6 +27,7 @@ public class Crime
     {
         mId = UUID.randomUUID();
         mDate = new Date();
+        mTime = new Date();
     }
 
 
@@ -84,9 +86,32 @@ public class Crime
     }
 
 
+
+    public Date getTime()
+    {
+        return mTime;
+    }
+
+
+
+    public void setTime(Date time)
+    {
+        mTime = time;
+    }
+
+
+
     public String convertDateForHuman()
     {
         DateFormat format = new DateFormat();
         return format.format("EEEE, MMMM dd, yyyy", mDate).toString();
+    }
+
+
+
+    public String convertTimeForHuman()
+    {
+        DateFormat format = new DateFormat();
+        return format.format("HH:mm", mTime).toString();
     }
 }

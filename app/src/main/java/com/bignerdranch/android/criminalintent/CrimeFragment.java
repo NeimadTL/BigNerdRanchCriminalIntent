@@ -29,13 +29,16 @@ public class CrimeFragment extends Fragment
     private final static String ARG_CRIME_ID = "crime_id";
     private final static String CRIME_ID_CHANGED_EXTRA = "com.bignerdranch.android.geoquiz.crime_id_changed";
     private final static String DIALOG_DATE = "DialogDate";
+    private final static String DIALOG_TIME = "Dialogtime";
     public final static int REQUEST_DATE = 0;
+    public final static int REQUEST_TIME = 1;
 
 
 
     private Crime mCrime;
     private EditText mTitleField;
     private Button mDateButton;
+    private Button mTimeButton;
     private CheckBox mSolvedCheckBox;
 
 
@@ -105,6 +108,23 @@ public class CrimeFragment extends Fragment
             }
         });
 
+
+        mTimeButton = (Button) view.findViewById(R.id.crime_time);
+        //mTimeButton.setText(mCrime.convertTimeForHuman());
+        updateTime();
+        mTimeButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                FragmentManager manager = getFragmentManager();
+                TimePickerFragment dialog = TimePickerFragment.newInstance(mCrime.getDate());
+                dialog.setTargetFragment(CrimeFragment.this, REQUEST_TIME);
+                dialog.show(manager, DIALOG_TIME);
+            }
+        });
+
+
         mSolvedCheckBox = (CheckBox) view.findViewById(R.id.crime_solved);
         mSolvedCheckBox.setChecked(mCrime.isSolved());
         mSolvedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -144,15 +164,31 @@ public class CrimeFragment extends Fragment
         {
             Date date = (Date) data.getSerializableExtra(DatePickerFragment.DATE_EXTRA);
             mCrime.setDate(date);
-            //mDateButton.setText(mCrime.getDate().toString());
             updateDate();
         }
+
+        if (requestCode == REQUEST_TIME)
+        {
+            Date time = (Date) data.getSerializableExtra(TimePickerFragment.TIME_EXTRA);
+            mCrime.setTime(time);
+            //mTimeButton.setText(mCrime.convertTimeForHuman());
+            updateTime();
+        }
     }
+
 
 
     private void updateDate()
     {
         String readableDate = mCrime.convertDateForHuman();
         mDateButton.setText(readableDate);
+    }
+
+
+
+    private void updateTime()
+    {
+        String readableTime = mCrime.convertTimeForHuman();
+        mTimeButton.setText(readableTime);
     }
 }
