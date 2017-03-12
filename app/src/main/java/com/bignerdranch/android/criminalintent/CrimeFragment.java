@@ -7,8 +7,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -67,6 +69,7 @@ public class CrimeFragment extends Fragment
         super.onCreate(savedInstanceState);
         UUID crimeId = (UUID) getArguments().getSerializable(ARG_CRIME_ID);
         mCrime = CrimeLab.get(getActivity()).getCrime(crimeId);
+        setHasOptionsMenu(true);
     }
 
 
@@ -89,7 +92,10 @@ public class CrimeFragment extends Fragment
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s)
+            {
+                setCrimeChangedResult(mCrime.getId());
+            }
         });
 
 
@@ -136,7 +142,7 @@ public class CrimeFragment extends Fragment
         });
 
 
-        setCrimeChangedResult(mCrime.getId());
+        // setCrimeChangedResult(mCrime.getId());
 
         return view;
     }
@@ -174,6 +180,43 @@ public class CrimeFragment extends Fragment
             //mTimeButton.setText(mCrime.convertTimeForHuman());
             updateTime();
         }
+    }
+
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+    {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_crime, menu);
+    }
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case R.id.menu_item_delete_crime:
+                Activity activity = getActivity();
+                CrimeLab.get(activity).remove(mCrime);
+                activity.finish();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+
+        CrimeLab.get(getActivity()).updateCrime(mCrime);
     }
 
 
