@@ -19,6 +19,7 @@ public class Crime
     private Date mDate;
     private Date mTime;
     private boolean mSolved;
+    private String mSuspect;
 
 
 
@@ -118,5 +119,19 @@ public class Crime
     {
         DateFormat format = new DateFormat();
         return format.format("HH:mm", mTime).toString();
+    }
+
+
+
+    public String getSuspect()
+    {
+        return mSuspect;
+    }
+
+
+
+    public void setSuspect(String suspect)
+    {
+        mSuspect = suspect;
     }
 }
