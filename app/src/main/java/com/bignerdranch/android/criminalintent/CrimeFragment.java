@@ -27,6 +27,10 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.bignerdranch.android.criminalintent.database.Crime;
+import com.bignerdranch.android.criminalintent.database.CrimeLab;
 
 import java.io.File;
 import java.util.Date;
@@ -43,10 +47,12 @@ public class CrimeFragment extends Fragment
     private final static String CRIME_ID_CHANGED_EXTRA = "com.bignerdranch.android.geoquiz.crime_id_changed";
     private final static String DIALOG_DATE = "DialogDate";
     private final static String DIALOG_TIME = "Dialogtime";
+    private final static String DIALOG_PHOTO = "DialogPhoto";
     public final static int REQUEST_DATE = 0;
     public final static int REQUEST_TIME = 1;
     public final static int REQUEST_CONTACT = 2;
     public final static int REQUEST_PHOTO = 3;
+    public final static int REQUEST_PHOTO_DIALOG = 4;
 
 
 
@@ -236,6 +242,21 @@ public class CrimeFragment extends Fragment
         });
 
         mPhotoview = (ImageView) view.findViewById(R.id.crime_photo);
+        mPhotoview.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                if (mPhotoFile != null && mPhotoFile.exists())
+                {
+                    //Toast.makeText(getActivity(),R.string.photo_get_pressed,Toast.LENGTH_SHORT).show();
+                    FragmentManager manager = getFragmentManager();
+                    PhotoViewerFragment dialog = PhotoViewerFragment.newInstance(mPhotoFile);
+                    dialog.setTargetFragment(CrimeFragment.this, REQUEST_PHOTO_DIALOG);
+                    dialog.show(manager, DIALOG_PHOTO);
+                }
+            }
+        });
         updatePhotoView();
 
         return view;
